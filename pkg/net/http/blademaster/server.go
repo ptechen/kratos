@@ -87,11 +87,11 @@ type MethodConfig struct {
 }
 
 // Start listen and serve bm engine by given DSN.
-func (engine *Engine) Start() error {
+func (engine *Engine) Start() (port int, err error) {
 	conf := engine.conf
 	l, err := net.Listen(conf.Network, conf.Addr)
 	if err != nil {
-		return errors.Wrapf(err, "blademaster: listen tcp: %s", conf.Addr)
+		return port, errors.Wrapf(err, "blademaster: listen tcp: %s", conf.Addr)
 	}
 
 	log.Info("blademaster: start http listen addr: %s", l.Addr().String())
@@ -108,8 +108,8 @@ func (engine *Engine) Start() error {
 			panic(errors.Wrapf(err, "blademaster: engine.ListenServer(%+v, %+v)", server, l))
 		}
 	}()
-
-	return nil
+	port = l.Addr().(*net.TCPAddr).Port
+	return port, err
 }
 
 // Engine is the framework's instance, it contains the muxer, middleware and configuration settings.
