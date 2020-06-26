@@ -301,13 +301,16 @@ func (s *Server) RunUnix(file string) error {
 // Start create a new goroutine run server with configured listen addr
 // will panic if any error happend
 // return server itself
-func (s *Server) Start() (*Server, int, error) {
+
+var RpcPort int
+
+func (s *Server) Start() (*Server, error) {
 	addr, err := s.startWithAddr()
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
-	port := addr.(*net.TCPAddr).Port
-	return s, port, nil
+	RpcPort = addr.(*net.TCPAddr).Port
+	return s, nil
 }
 
 // StartWithAddr create a new goroutine run server with configured listen addr

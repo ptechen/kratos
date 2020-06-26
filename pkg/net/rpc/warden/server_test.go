@@ -173,7 +173,7 @@ func runServer(t *testing.T, interceptors ...grpc.UnaryServerInterceptor) func()
 				outPut = append(outPut, "4")
 				return resp, err
 			})
-		if _, _, err := server.Start(); err != nil {
+		if _, err := server.Start(); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -496,7 +496,7 @@ func BenchmarkServer(b *testing.B) {
 	server := NewServer(&ServerConfig{Addr: _testAddr, Timeout: xtime.Duration(time.Second)})
 	go func() {
 		pb.RegisterGreeterServer(server.Server(), &helloServer{})
-		if _, _, err := server.Start(); err != nil {
+		if _, err := server.Start(); err != nil {
 			os.Exit(0)
 			return
 		}
